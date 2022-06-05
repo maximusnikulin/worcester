@@ -16,12 +16,12 @@ services:
   smd-nest:
     build: 
       context: .
-      dockerfile: ./Dockerfile      
+      dockerfile: ./Dockerfile
     ports: 
       - "3000:3000"
     depends_on: 
       - smd-db
     volumes: 
       - .:/app
-      - /app/node_modules  
+      - ./node_modules:/app/node_modules:ro
     command: 'yarn start:dev'
