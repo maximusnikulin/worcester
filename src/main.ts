@@ -1,8 +1,15 @@
 import { NestFactory } from '@nestjs/core'
+
 import { AppModule } from './app.module'
+import runDocs from './docs'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  app.setGlobalPrefix('api')
+  // if (process.env.NODE_ENV === 'production') {
+  runDocs(app)
+  // }
+
   await app.listen(3000)
 }
 bootstrap()
