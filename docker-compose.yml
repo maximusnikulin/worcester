@@ -1,0 +1,27 @@
+version: '3'
+services: 
+  smd-db:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    environment: 
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - ./mysql-volume:/var/lib/mysql
+      - ./mysql-config.cnf:/etc/mysql/conf.d/custom.cnf
+  smd-nest:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile      
+    ports: 
+      - "3000:3000"
+    depends_on: 
+      - smd-db
+    volumes: 
+      - .:/app
+      - /app/node_modules  
+    command: 'yarn start:dev'
