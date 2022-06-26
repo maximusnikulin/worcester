@@ -7,6 +7,7 @@ declare global {
       DB_PORT: number
       DB_NAME: string
       NODE_ENV?: 'production' | 'development' | undefined
+      APP_PORT: number
     }
   }
 }

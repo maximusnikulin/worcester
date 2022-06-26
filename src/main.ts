@@ -10,6 +10,6 @@ async function bootstrap() {
   runDocs(app)
   // }
 
-  await app.listen(3000)
+  await app.listen(process.env.APP_PORT)
 }
 bootstrap()

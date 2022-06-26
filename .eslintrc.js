@@ -1,3 +1,10 @@
+const getPathGroups = paths =>
+  paths.map(el => ({
+    pattern: `${el}/**/*`,
+    group: 'external',
+    position: 'after',
+  }))
+
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -36,11 +43,13 @@ module.exports = {
           'type',
           'unknown',
         ],
+        pathGroupsExcludedImportTypes: ['builtin'],
+        pathGroups: getPathGroups(['@dtos', '@modules']),
         'newlines-between': 'always',
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: false,
-        },
+        // alphabetize: {
+        //   order: 'asc',
+        //   caseInsensitive: false,
+        // },
       },
     ],
   },
