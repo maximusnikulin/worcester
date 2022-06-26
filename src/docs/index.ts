@@ -10,5 +10,5 @@ export default function runDocs(app: INestApplication) {
     .build()
 
   const document = SwaggerModule.createDocument(app, options)
-  SwaggerModule.setup('api', app, document)
+  SwaggerModule.setup('api/v1', app, document)
 }

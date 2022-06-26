@@ -5,7 +5,7 @@ import runDocs from './docs'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api/v1')
   // if (process.env.NODE_ENV === 'production') {
   runDocs(app)
   // }
