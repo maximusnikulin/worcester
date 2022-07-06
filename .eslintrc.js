@@ -26,7 +26,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error'],
     '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-function-return-type': ['error'],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'import/order': [
@@ -44,12 +44,17 @@ module.exports = {
           'unknown',
         ],
         pathGroupsExcludedImportTypes: ['builtin'],
-        pathGroups: getPathGroups(['@dtos', '@modules']),
+        pathGroups: getPathGroups([
+          '@configs',
+          '@dtos',
+          '@modules',
+          '@helpers',
+        ]),
         'newlines-between': 'always',
-        // alphabetize: {
-        //   order: 'asc',
-        //   caseInsensitive: false,
-        // },
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: false,
+        },
       },
     ],
   },

@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common'
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common'
 
-import { SignupDto, SigninDto } from '@dtos/index'
-
+import { SigninDto } from './dto/signin.dto'
+import { SignupDto } from './dto/signup.dto'
+import { Auth } from './entities/auth.entity'
 import { AuthService } from './services/auth.service'
 import { JwtPayload } from './types'
 
@@ -9,15 +10,15 @@ import { JwtPayload } from './types'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signup')
-  signUp(@Body(ValidationPipe) signupCredentialsDto: SignupDto): Promise<void> {
+  @Post('signup')
+  signUp(@Body(ValidationPipe) signupCredentialsDto: SignupDto): Promise<Auth> {
     return this.authService.signUp(signupCredentialsDto)
   }
 
-  @Post('/signin')
+  @Post('signin')
   signIn(
     @Body(ValidationPipe) signinCredentialsDto: SigninDto,
-  ): Promise<{ accessToken: string; user: JwtPayload }> {
+  ): Promise<{ accessToken: string; payload: JwtPayload }> {
     return this.authService.signIn(signinCredentialsDto)
   }
 }

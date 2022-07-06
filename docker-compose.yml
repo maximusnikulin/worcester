@@ -23,6 +23,7 @@ services:
       - smd-db
     volumes: 
       - .:/app
-      - ./node_modules:/app/node_modules
+      - ./node_modules:/app/node_modules:ro
+      - '/app/node_modules/sqlite3'
       - '/app/node_modules/bcrypt'
     command: 'yarn start:dev'
