@@ -12,8 +12,6 @@ import { SigninDto } from '../dto/signin.dto'
 import { SignupDto } from '../dto/signup.dto'
 import { Auth } from '../entities/auth.entity'
 
-const ALREADY_EXISTS_CODE = 'ER_DUP_ENTRY'
-
 @EntityRepository(Auth)
 export class AuthRepository extends Repository<Auth> {
   async signUp(signupCredentialsDto: SignupDto): Promise<Auth> {
@@ -44,10 +42,13 @@ export class AuthRepository extends Repository<Auth> {
   async validateUserPassword(
     signinCredentialDto: SigninDto,
   ): Promise<JwtPayload> {
+    const MESSAGE_FAIL = 'user or password is wrong'
     const { username, password } = signinCredentialDto
 
     const auth = await this.findOneOrFail({
       username,
+    }).catch(() => {
+      throw new UnauthorizedException(MESSAGE_FAIL)
     })
 
     if (await auth.validatePassword(password)) {
@@ -56,7 +57,7 @@ export class AuthRepository extends Repository<Auth> {
       }
     }
 
-    throw new UnauthorizedException('password wrong')
+    throw new UnauthorizedException(MESSAGE_FAIL)
   }
 
   private async hashPassword(password: string, salt: string): Promise<string> {

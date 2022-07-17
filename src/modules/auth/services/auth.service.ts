@@ -24,6 +24,7 @@ export class AuthService {
     const resp = await this.authRepository.validateUserPassword(
       signInCredentialsDto,
     )
+
     if (!resp) {
       throw new UnauthorizedException('Invalid credentials')
     }
