@@ -1,9 +1,19 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { RequestWithUser } from 'src/types/requests'
 
 import { SigninDto } from './dto/signin.dto'
 import { SignupDto } from './dto/signup.dto'
 import { Auth } from './entities/auth.entity'
+import { UserGuard } from './guards/user.guard'
 import { AuthService } from './services/auth.service'
 import { JwtPayload } from './types'
 
@@ -22,5 +32,12 @@ export class AuthController {
     @Body(ValidationPipe) signinCredentialsDto: SigninDto,
   ): Promise<{ accessToken: string; payload: JwtPayload }> {
     return this.authService.signIn(signinCredentialsDto)
+  }
+
+  @HttpCode(200)
+  @Post('logout')
+  @UseGuards(UserGuard())
+  logout(@Req() req: RequestWithUser) {
+    return this.authService.logout(req.user.id)
   }
 }

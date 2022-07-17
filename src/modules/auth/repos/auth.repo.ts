@@ -39,6 +39,21 @@ export class AuthRepository extends Repository<Auth> {
     }
   }
 
+  async updateToken(params: { userId: number; token: string }) {
+    const { token, userId } = params
+    // TODO: need add secure
+    return this.update({ id: userId }, { token })
+  }
+
+  async validateUserToken(params: { userId: number; token: string }) {
+    const user = await this.findOne(params.userId)
+    if (!user.token) {
+      return false
+    }
+
+    return user.validateToken(params.token)
+  }
+
   async validateUserPassword(
     signinCredentialDto: SigninDto,
   ): Promise<JwtPayload> {
@@ -53,6 +68,7 @@ export class AuthRepository extends Repository<Auth> {
 
     if (await auth.validatePassword(password)) {
       return {
+        id: auth.id,
         username: auth.username,
       }
     }

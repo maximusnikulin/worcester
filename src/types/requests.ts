@@ -1,5 +1,6 @@
-import { Auth } from '@modules/auth/entities/auth.entity'
+import { Request } from 'express'
 
+import { Auth } from '@modules/auth/entities/auth.entity'
 export interface RequestWithUser extends Request {
-  user: Pick<Auth, 'username' | 'id'>
+  user: Auth
 }

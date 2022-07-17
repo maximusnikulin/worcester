@@ -10,4 +10,7 @@ export class Profile extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   description: string
+
+  @Column({ default: 0 })
+  rate: number
 }

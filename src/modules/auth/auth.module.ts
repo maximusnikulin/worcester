@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Global, Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -10,10 +10,11 @@ import { AuthRepository } from './repos/auth.repo'
 import { AuthService } from './services/auth.service'
 import { JwtStrategy } from './services/jwt-strategy'
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthRepository]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ defaultStrategy: 'jwt', session: true }),
     JwtModule.registerAsync(jwtConfig),
   ],
   controllers: [AuthController],

@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import * as bcrypt from 'bcrypt'
 
 import { SigninDto } from '../dto/signin.dto'
 import { SignupDto } from '../dto/signup.dto'
@@ -32,9 +33,18 @@ export class AuthService {
     const payload: JwtPayload = resp
     const accessToken = this.jwtService.sign(payload)
 
+    await this.authRepository.updateToken({
+      userId: resp.id,
+      token: accessToken,
+    })
+
     return {
       accessToken,
       payload: resp,
     }
+  }
+
+  async logout(userId: number) {
+    return this.authRepository.update({ id: userId }, { token: null })
   }
 }
