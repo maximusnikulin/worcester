@@ -1,6 +1,5 @@
 import * as path from 'path'
 
-import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm'
 
 import getEnv from './env.config'
@@ -15,8 +14,8 @@ const dbConfig: TypeOrmModuleAsyncOptions = {
     if (IS_TEST) {
       return {
         type: 'sqlite',
-        database: ':memory:',
-        dropSchema: true,
+        database: `${DB_NAME}.test.sqlite`,
+        dropSchema: false,
         entities: [entitiesPath],
         synchronize: true,
         logging: false,

@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing'
 
 import { getPreffix, getTestingWithApp } from '@helpers/testing'
 
-import { AuthModule } from '../auth.module'
 import { AuthService } from '../services/auth.service'
 
 describe('auth service testing', () => {
@@ -10,11 +9,7 @@ describe('auth service testing', () => {
   let moduleRef: TestingModule
 
   beforeAll(async () => {
-    moduleRef = await Test.createTestingModule(
-      getTestingWithApp({
-        imports: [AuthModule],
-      }),
-    ).compile()
+    moduleRef = await Test.createTestingModule(getTestingWithApp()).compile()
 
     authService = moduleRef.get(AuthService)
   })
@@ -39,13 +34,16 @@ describe('auth service testing', () => {
           username,
           password: `norightsecret`,
         }),
-      ).rejects.toThrowErrorMatchingInlineSnapshot(`"password wrong"`)
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"user or password is wrong"`,
+      )
     })
 
-    it('should throw error on signuo if username already exists', async () => {
+    it('should throw error on signup if username already exists', async () => {
       const preffix = getPreffix()
       const username = `test${preffix}`
       const password = `secret${preffix}`
+
       await authService.signUp({
         username,
         password,
@@ -58,8 +56,6 @@ describe('auth service testing', () => {
         }),
       ).rejects.toThrowErrorMatchingInlineSnapshot(`"Username already exists"`)
     })
-
-    // it('should throw execption when we request private data with fail credentials', () => {})
   })
 
   describe('positive cases', () => {
@@ -91,9 +87,5 @@ describe('auth service testing', () => {
       expect(res.accessToken).toBeTruthy()
       expect(res.payload.username).toBe(username)
     })
-
-    // it('should return private data if have right credentials', () => {
-
-    // })
   })
 })

@@ -12,10 +12,9 @@ import { RequestWithUser } from 'src/types/requests'
 
 import { SigninDto } from './dto/signin.dto'
 import { SignupDto } from './dto/signup.dto'
-import { Auth } from './entities/auth.entity'
 import { UserGuard } from './guards/user.guard'
 import { AuthService } from './services/auth.service'
-import { JwtPayload } from './types'
+import { JwtPayload, LogoutResponse, SignUpResponse } from './types'
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -23,10 +22,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signUp(@Body(ValidationPipe) signupCredentialsDto: SignupDto): Promise<Auth> {
+  signUp(
+    @Body(ValidationPipe) signupCredentialsDto: SignupDto,
+  ): Promise<SignUpResponse> {
     return this.authService.signUp(signupCredentialsDto)
   }
 
+  @HttpCode(200)
   @Post('signin')
   signIn(
     @Body(ValidationPipe) signinCredentialsDto: SigninDto,
@@ -37,7 +39,7 @@ export class AuthController {
   @HttpCode(200)
   @Post('logout')
   @UseGuards(UserGuard())
-  logout(@Req() req: RequestWithUser) {
+  logout(@Req() req: RequestWithUser): Promise<LogoutResponse> {
     return this.authService.logout(req.user.id)
   }
 }
